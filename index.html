@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TODO</title>
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+
+  <body>
+    <div class="main">
+      <div class="frame sidebar">
+        <div class="frame frame__buttons">
+          <button class="btn btn__add">Add new task</button>
+          <button class="btn btn__sort-name">Sort by name ↓</button>
+          <button class="btn btn__sort-state">Sort by state ↓</button>
+          <button class="btn btn__show-all">Show all tasks</button>
+        </div>
+        <div class="frame frame__lists">
+          <!-- lists -->
+        </div>
+        <div class="frame frame__tags">
+          <!-- tags -->
+        </div>
+      </div>
+      <div class="frame frame__tasks">
+        <!-- tasks -->
+      </div>
+    </div>
+
+    <!-- template for task -->
+    <template id="task">
+      <div class="task">
+        <div class="task__name">
+          <!-- name -->
+        </div>
+        <input
+          class="btn btn__change-state"
+          type="button"
+        />
+        <button class="btn btn__del">Delete</button>
+      </div>
+      <!-- <div class="task task__info">
+        <p></p><p></p><p></p><p></p>
+      </div> -->
+    </template>
+    <!-- template for task -->
+
+    <!-- template for list -->
+    <template id="list">
+      <button class="btn btn--filter"></button>
+    </template>
+    <!-- template for list -->
+
+    <!-- modal for new task -->
+    <dialog class="add_new_task__dialog">
+      <div>
+        <label>Name:
+          <input type="text" class="task__input" id="input_name" />
+        </label>
+        <label>
+          List:
+          <input type="text" class="task__input" id="input_group" /> 
+          Tag:
+          <input type="text" class="task__input" id="input_tag" />     
+        </label>
+        <button class="btn" id="add">Add!</button>
+      </div>
+    </dialog>
+    <!-- modal for new task -->
+    <script src="./main.js"></script>
+  </body>
+</html>

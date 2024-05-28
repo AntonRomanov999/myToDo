@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+:root {
+    scroll-behavior: smooth;  
+    --foreground: #6e6e6e;
+    --background: #ede8d0;
+    --background-done: #85c198;
+    --background-inprogress: #97bbcc;
+    --foreground-done: #4a4a4a;
+    --highlight: #e3fbff;
+    --inputs: #f2edff;
+    font-family: 'Open Sans', sans-serif;
+    background-color: var(--background);
+   }
+
+.main {
+    margin: 1rem auto 1rem auto;
+    max-width: 1200px;
+    display: flex;
+    gap: 2rem;
+    flex-shrink: 1;
+    flex-grow: 1;
+    justify-content: center;    
+}
+
+.frame {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-shrink: 1;
+    margin: 0.5rem 0 0.5rem 0;    
+}
+
+.btn {
+    min-width: max-content;
+    padding: 0.5rem;
+    font-size: 1rem;
+    color: var(--foreground);
+    background: none;
+    border: 2px solid var(--foreground);
+    border-radius: 0.3rem;
+}
+
+.active {
+    color: var(--background);
+    background: var(--foreground);
+    border: 2px solid var(--foreground);
+    border-radius: 0.3rem;
+    font-weight: bold;
+}
+
+.active:hover {
+    color: black;
+}
+
+.btn--done {
+    background-color: var(--background-done);
+    color: var(--foreground-done);
+    border: 2px solid var(--foreground-done);
+}
+
+.btn--inprogress {
+    background-color: var(--background-inprogress);
+    color: var(--foreground-done);
+    border: 2px solid var(--foreground-done);
+}
+
+
+.btn--filter {
+    border-radius: 1.5rem;
+}
+
+.btn:hover {
+    background-color: var(--highlight);
+}
+
+.sidebar {
+    margin-left: 1rem;
+}
+
+.frame__tasks {
+    margin: 1rem 1rem 1rem 0; 
+    flex-grow: 1;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border: 2px solid var(--foreground);
+    border-radius: 0.3rem;
+    font-size: 1rem;
+    color: var(--foreground);    
+    gap: 0.5rem;
+}
+
+.task__name {
+    flex-shrink: 1;
+    flex-grow: 1;
+    padding-left: 1rem;
+    font-weight: bold;
+}
+
+.task__name--done {
+    font-weight: normal;
+    text-decoration: line-through
+}
+
+.task input {
+    font-size: 0.8rem;
+    min-width: 100px;
+}
+
+.task button {
+    font-size: 0.8rem;
+    min-width: 100px;
+}
+
+.add_new_task__dialog {
+    background-color: var(--background);
+    border: 2px solid var(--foreground);
+    border-radius: 1rem;
+}
+
+.add_new_task__dialog div {
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.add_new_task__dialog label {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    flex-shrink: 1;
+    align-items: center;
+}
+
+.add_new_task__dialog label input{
+    min-height: 2rem;
+    flex-grow: 1;
+    min-width: 200px;
+    background-color: var(--inputs);
+    border: 2px solid var(--foreground);
+    border-radius: 0.3rem;
+    color: var(--foreground);
+    font-size: 1rem;
+}
+
+.add_new_task__dialog button {
+    min-width: 100%;
+}
