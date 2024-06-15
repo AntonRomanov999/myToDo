@@ -2,11 +2,11 @@ import { Task, saveTasks, tasks } from "./tasks.js";
 
 //settings for display tasks
 let filterKey = 'group';
-let filterValue = 0;
+let filterValue = 'All tasks';
 
 //get tasks for render
 function getTasks(key, value) {
-  if (value === 0) {
+  if (value === 'All tasks') {
     return tasks
   } else return tasks.filter((i) => i[key] === value);
 }
@@ -16,7 +16,8 @@ function regenTasks() {
   frameTasks.innerHTML = "";
   frameLists.innerHTML = "";
   renderTasks();
-  renderLists()
+  renderLists();
+  renderInfo()
 }
 
 function getGroups() {
@@ -31,10 +32,21 @@ function getGroups() {
 const addBtn = document.querySelector('.btn__add');
 const dlgNewTask = document.querySelector('.add_new_task__dialog');
 const dlgAddClose = document.getElementById("add");
+function groupList() {
+  const groups = getGroups();
+  dlgLists.innerHTML = "";
+  groups.forEach((i) => {
+    const item = document.createElement("option");
+    item.value = i;
+    dlgLists.prepend(item);
+  })
+}
 addBtn.addEventListener("click", () => {
   dlgNewTask.showModal();
+  groupList();
 });
 //variables for new task values
+const dlgLists = document.getElementById("lists");
 const newName = document.getElementById("input_name");
 const newGroup = document.getElementById("input_group");
 //button for creating new task
@@ -188,8 +200,19 @@ renderLists()
 //show all tasks
 const btnShowAll = document.querySelector(".btn__show-all");
 btnShowAll.addEventListener("click", () => {
-  filterValue = 0;
+  filterValue = 'All tasks';
   regenTasks();
 })
 
 //calculate days for task
+function renderInfo() {
+  const info = document.querySelector(".info");
+  const tasksInfo = tasks.length !== 1 ? `${tasks.length} tasks` : `${tasks.length} task`;
+  const unfinQ = tasks.length - getTasks('state', 'Done!').length;
+  const groupsQ = getGroups().length;
+  const groupsInfo = groupsQ !== 1 ? `${groupsQ} lists` : `${groupsQ} list`;
+  info.children[0].textContent = `MyToDo: ${tasksInfo} in ${groupsInfo}, ${unfinQ} not done`;
+  info.children[1].textContent = `${filterValue}`
+}
+
+renderInfo();

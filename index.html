@@ -10,7 +10,12 @@
   </head>
 
   <body>
-    <div class="main__head"><p class="main__info">MyToDo:</p></div>
+    <section class="info__frame">
+      <div class="info">
+        <div></div>
+        <div></div>
+      </div>
+    </section>
     <div class="main">
       <div class="frame sidebar">
         <div class="frame frame__buttons">
@@ -22,9 +27,6 @@
         </div>
         <div class="frame frame__lists">
           <!-- lists -->
-        </div>
-        <div class="frame frame__tags">
-          <!-- tags -->
         </div>
       </div>
       <div class="frame frame__tasks">
@@ -43,7 +45,7 @@
           <button class="btn__show-info">+</button>
         </div>
         <div class="task__info">
-          <p>Start date: <span class="task__start-date"></span></p> 
+          <p>Start: <span class="task__start-date"></span></p> 
           <input class="btn btn__fin-date" type="date" />
           <button class="btn btn__del">Delete</button>
                             
@@ -66,9 +68,12 @@
         </label>
         <label>
           List:
-          <input type="text" class="task__input" id="input_group" /> 
-          Tag:
-          <input type="text" class="task__input" id="input_tag" />     
+          <input class="task__input" list="lists" id="input_group" /> 
+          <datalist id="lists">
+            <!-- groups -->
+          </datalist>
+          <!-- Tag:
+          <input type="text" class="task__input" id="input_tag" />      -->
         </label>
         <button class="btn" id="add">Add!</button>
       </div>

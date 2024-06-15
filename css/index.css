@@ -6,6 +6,7 @@
     --background: #ede8d0;
     --background-done: #85c198;
     --background-inprogress: #a5c6d6;
+    --background-transparent: #7b899180;
     --foreground-done: #4a4a4a;
     --highlight: #e3fbff;
     --inputs: #f2edff;
@@ -26,20 +27,23 @@
     justify-content: center;    
 }
 
-.main__head {
+.info__frame {
     color: var(--background);
     background-color: var(--foreground);
 }
 
-.main__info {
+.info {
     margin: 0 auto 0 auto;
-    max-width: 1200px;
+    max-width: calc(1200px - 4rem);
     font-size: 1rem;
     display: flex;
+    flex-shrink: 0;
+    flex-grow: 1;
+    justify-content: space-between;
+    gap: 1rem;
     color: var(--background);
     background-color: var(--foreground);
-    justify-content: center;   
-    padding: 0.75rem 0 0.75rem 0;    
+    padding: 0.75rem 1.5rem 0.75rem 1.5rem;    
 }
 
 .frame {
@@ -192,9 +196,15 @@
 }
 
 .add_new_task__dialog {
+    margin: auto;
+    color: var(--foreground);
     background-color: var(--background);
     border: 2px solid var(--foreground);
     border-radius: 1rem;
+}
+
+.add_new_task__dialog::backdrop {
+    background: var(--background-transparent);  
 }
 
 .add_new_task__dialog div {
@@ -227,4 +237,15 @@
 
 .add_new_task__dialog button {
     min-width: 100%;
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        width: 0;
+        overflow: hidden;
+    }
+
+    .main {
+        gap: 0;  
+    }
 }
