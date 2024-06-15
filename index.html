@@ -6,15 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TODO</title>
     <link rel="stylesheet" href="css/index.css" />
+    <script type="module" src="./main.js"></script>
   </head>
 
   <body>
+    <div class="main__head"><p class="main__info">MyToDo:</p></div>
     <div class="main">
       <div class="frame sidebar">
         <div class="frame frame__buttons">
           <button class="btn btn__add">Add new task</button>
           <button class="btn btn__sort-name">Sort by name ↓</button>
           <button class="btn btn__sort-state">Sort by state ↓</button>
+          <button class="btn btn__sort-dline">Sort by deadline ↓</button>
           <button class="btn btn__show-all">Show all tasks</button>
         </div>
         <div class="frame frame__lists">
@@ -32,18 +35,20 @@
     <!-- template for task -->
     <template id="task">
       <div class="task">
-        <div class="task__name">
-          <!-- name -->
+        <div class="task__container">
+          <div class="task__name" contenteditable="plaintext-only">
+            <!-- name -->
+          </div>
+          <input class="btn btn__change-state" type="button" />
+          <button class="btn__show-info">+</button>
         </div>
-        <input
-          class="btn btn__change-state"
-          type="button"
-        />
-        <button class="btn btn__del">Delete</button>
+        <div class="task__info">
+          <p>Start date: <span class="task__start-date"></span></p> 
+          <input class="btn btn__fin-date" type="date" />
+          <button class="btn btn__del">Delete</button>
+                            
+        </div>
       </div>
-      <!-- <div class="task task__info">
-        <p></p><p></p><p></p><p></p>
-      </div> -->
     </template>
     <!-- template for task -->
 
@@ -57,7 +62,7 @@
     <dialog class="add_new_task__dialog">
       <div>
         <label>Name:
-          <input type="text" class="task__input" id="input_name" />
+          <input type="text" class="task__input" id="input_name" placeholder="New task"/>
         </label>
         <label>
           List:
@@ -69,6 +74,5 @@
       </div>
     </dialog>
     <!-- modal for new task -->
-    <script src="./main.js"></script>
   </body>
 </html>

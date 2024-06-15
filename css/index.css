@@ -5,22 +5,41 @@
     --foreground: #6e6e6e;
     --background: #ede8d0;
     --background-done: #85c198;
-    --background-inprogress: #97bbcc;
+    --background-inprogress: #a5c6d6;
     --foreground-done: #4a4a4a;
     --highlight: #e3fbff;
     --inputs: #f2edff;
     font-family: 'Open Sans', sans-serif;
     background-color: var(--background);
+
    }
 
+* {
+    margin: 0;
+}
+
 .main {
-    margin: 1rem auto 1rem auto;
+    margin: 0.5rem auto 5rem auto;
     max-width: 1200px;
     display: flex;
     gap: 2rem;
-    flex-shrink: 1;
-    flex-grow: 1;
     justify-content: center;    
+}
+
+.main__head {
+    color: var(--background);
+    background-color: var(--foreground);
+}
+
+.main__info {
+    margin: 0 auto 0 auto;
+    max-width: 1200px;
+    font-size: 1rem;
+    display: flex;
+    color: var(--background);
+    background-color: var(--foreground);
+    justify-content: center;   
+    padding: 0.75rem 0 0.75rem 0;    
 }
 
 .frame {
@@ -39,6 +58,7 @@
     background: none;
     border: 2px solid var(--foreground);
     border-radius: 0.3rem;
+    cursor: pointer;
 }
 
 .active {
@@ -83,15 +103,20 @@
     flex-grow: 1;
 }
 
-.task {
+.task__container {
     display: flex;
     align-items: center;
+    gap: 0.5rem;
+}
+
+.task {
+    display: flex;
+    flex-direction: column;
     padding: 0.5rem;
     border: 2px solid var(--foreground);
     border-radius: 0.3rem;
     font-size: 1rem;
-    color: var(--foreground);    
-    gap: 0.5rem;
+    color: var(--foreground);   
 }
 
 .task__name {
@@ -111,9 +136,59 @@
     min-width: 100px;
 }
 
-.task button {
+.task button.btn {
     font-size: 0.8rem;
     min-width: 100px;
+}
+
+.btn__show-info {
+    font-size: 2rem;
+    padding: 0.5rem;
+    color: var(--foreground);
+    background:none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn__show-info.show {
+    transform: rotate(45deg);
+}
+
+.task__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    padding: 0 0.5rem 0 1rem;
+    font-size: 0.8rem;
+    font-style: italic;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+}
+
+.task__info.show {
+    max-height: 200px;
+}
+
+.task__info input {
+    margin-left: 0.5rem;
+    font-size: 0.8rem;
+    /* font-style: italic;    */
+    font-family: 'Open Sans', sans-serif; 
+}
+
+.task__info p {
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.task__info button {
+    min-height: 2.425rem;
+}
+
+.task__info span {
+    margin-left: 0.5rem;
 }
 
 .add_new_task__dialog {

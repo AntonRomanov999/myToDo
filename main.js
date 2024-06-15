@@ -1,40 +1,8 @@
-let tasks = JSON.parse(localStorage.getItem('TODO')) ? JSON.parse(localStorage.getItem('TODO')) : [];
-const allTags = [];
+import { Task, saveTasks, tasks } from "./tasks.js";
+
+//settings for display tasks
 let filterKey = 'group';
 let filterValue = 0;
-
-class Task {
-  constructor(name, startDate, group, tags, endDate, state) {
-    this.name = name;
-    this.group = group || 'Default list';
-    this.tags = [];
-    this.state = state || 'Planned...';
-    this.startDate = startDate;
-    this.endDate = endDate;
-  }
-  static addNewTask(name, group) {
-    if (name) {
-      const date = new Date().toString();
-      tasks.push(new Task(name, date, group));
-      saveTasks()     
-    } else throw 'Error: name for task needed!'
-  }
-  static delTask(task) {
-    tasks = tasks.filter((i) => i !== task);
-    saveTasks()
-  }
-  static renameTask(task, newname) {
-    if (newname) {
-      task.name = newname;
-      saveTasks()
-    } else throw 'Error: name for task needed!'
-  }  
-}
-
-function saveTasks() {
-  const tasksToSave = JSON.stringify(tasks);
-  localStorage.setItem('TODO', tasksToSave);
-}
 
 //get tasks for render
 function getTasks(key, value) {
@@ -49,19 +17,6 @@ function regenTasks() {
   frameLists.innerHTML = "";
   renderTasks();
   renderLists()
-}
-
-//sort tasks
-function sortTasks(value, order) {
-  const compareFn = (a, b) => {
-    if (a[value] < b[value]) {
-      return -1 * order;
-    } else if (a[value] > b[value]) {
-      return 1 * order;
-    }
-    return 0;
-  };
-  tasks.sort(compareFn);
 }
 
 function getGroups() {
@@ -82,10 +37,9 @@ addBtn.addEventListener("click", () => {
 //variables for new task values
 const newName = document.getElementById("input_name");
 const newGroup = document.getElementById("input_group");
-const newTag = document.getElementById("input_tag");
 //button for creating new task
 dlgAddClose.addEventListener("click", () => {
-  Task.addNewTask(newName.value, newGroup.value, newTag.value);
+  Task.addNewTask(newName.value, newGroup.value);
   dlgNewTask.close();
   regenTasks();
 });
@@ -98,18 +52,24 @@ function renderTasks() {
   let tasksToRender = getTasks(filterKey, filterValue);
   for (let i = 0; i < tasksToRender.length; i++) {
     const clone = taskTemplate.content.cloneNode(true);
-    let nameText = clone.querySelector(".task__name");
+    const nameText = clone.querySelector(".task__name");
+    const startDate = tasksToRender[i].startDate.split('-').reverse().join('.');
     nameText.textContent = `${tasksToRender[i].name}`;
-    nameText.addEventListener("click", () => {
-      Task.renameTask(tasksToRender[i], prompt());
+    nameText.addEventListener("focusout", () => {
+      Task.renameTask(tasksToRender[i], nameText.textContent);
       regenTasks()
     })
-    let btnDel = clone.querySelector(".btn__del");
+    nameText.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        nameText.blur();
+      }  
+    })
+    const btnDel = clone.querySelector(".btn__del");
     btnDel.addEventListener("click", () => {
       Task.delTask(tasksToRender[i]);
       regenTasks()
     });
-    let btnChangeState = clone.querySelector(".btn__change-state");
+    const btnChangeState = clone.querySelector(".btn__change-state");
     if (tasksToRender[i].state === 'Done!') { 
       nameText.classList.add("task__name--done");
       btnChangeState.classList.add("btn--done"); 
@@ -127,28 +87,58 @@ function renderTasks() {
         nameText.classList.remove("task__name--done");
         btnChangeState.classList.remove("btn--done"); 
         tasksToRender[i].state = 'Planned...';
-      }
+      };
       saveTasks();
       regenTasks();
     });
+    const startDateField = clone.querySelector(".task__start-date");
+    startDateField.textContent = `${startDate}`;
+    const finishDateField = clone.querySelector(".btn__fin-date");
+    finishDateField.addEventListener("change", () => {
+      tasksToRender[i].deadline = finishDateField.value;
+      saveTasks();
+    });
+    finishDateField.value = `${tasksToRender[i].deadline}`;
+    const btnShowInfo = clone.querySelector(".btn__show-info");
+    const taskInfo = clone.querySelector(".task__info");
+    btnShowInfo.addEventListener("click", () => {
+      taskInfo.classList.toggle("show");
+      btnShowInfo.classList.toggle("show");
+    })
     frameTasks.appendChild(clone);
   }
 }
-//modal for rename task
 
-//
-renderTasks()
+renderTasks();
 
-//sort
+//sort tasks
+function sortTasks(value, num) {
+  const compareFn =
+    value !== 'deadline'
+      ? (a, b) => {
+          if (a[value] < b[value]) {
+            return -num;
+          } else if (a[value] > b[value]) {
+            return num;
+          }
+          return 0;
+        }
+      : (a, b) => {
+          return ( Date.parse(a[value]) - Date.parse(b[value]) ) * num;
+        };
+  tasks.sort(compareFn);
+}
+
 let order = 1;
+
 function showSorted(value, btn) {   
   if (order === 1) {
-    btn.textContent = `Sort by ${value} ↓`;
+    btn.textContent = `Sort by ${value} ↑`;
     sortTasks(value, order);
     regenTasks();
     order = -1;
   } else {
-    btn.textContent = `Sort by ${value} ↑`;
+    btn.textContent = `Sort by ${value} ↓`;
     sortTasks(value, order);
     regenTasks();
     order = 1;
@@ -163,6 +153,11 @@ btnSortbyName.addEventListener("click", () => {
 const btnSortbyState = document.querySelector('.btn__sort-state');
 btnSortbyState.addEventListener("click", () => {   
   showSorted("state", btnSortbyState);
+})
+
+const btnSortbyDLine = document.querySelector('.btn__sort-dline');
+btnSortbyDLine.addEventListener("click", () => {   
+  showSorted("deadline", btnSortbyDLine);
 })
 
 //render lists (groups)
@@ -196,3 +191,5 @@ btnShowAll.addEventListener("click", () => {
   filterValue = 0;
   regenTasks();
 })
+
+//calculate days for task
