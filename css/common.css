@@ -1,0 +1,17 @@
+:root {
+    scroll-behavior: smooth;  
+    --foreground: #6e6e6e;
+    --background: #ede8d0;
+    --background-done: #85c198;
+    --background-inprogress: #a5c6d6;
+    --background-transparent: #7b899180;
+    --foreground-done: #4a4a4a;
+    --highlight: #e3fbff;
+    --inputs: #f2edff;
+    font-family: 'Open Sans', sans-serif;
+    background-color: var(--background);
+   }
+
+* {
+    margin: 0;
+}

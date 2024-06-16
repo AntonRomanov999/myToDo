@@ -1,23 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
-
-:root {
-    scroll-behavior: smooth;  
-    --foreground: #6e6e6e;
-    --background: #ede8d0;
-    --background-done: #85c198;
-    --background-inprogress: #a5c6d6;
-    --background-transparent: #7b899180;
-    --foreground-done: #4a4a4a;
-    --highlight: #e3fbff;
-    --inputs: #f2edff;
-    font-family: 'Open Sans', sans-serif;
-    background-color: var(--background);
-
-   }
-
-* {
-    margin: 0;
-}
+@import "common.css";
 
 .main {
     margin: 0.5rem auto 5rem auto;
@@ -201,6 +183,7 @@
     background-color: var(--background);
     border: 2px solid var(--foreground);
     border-radius: 1rem;
+    overflow: visible;
 }
 
 .add_new_task__dialog::backdrop {
@@ -216,23 +199,22 @@
     align-items: center;
 }
 
-.add_new_task__dialog label {
-    display: flex;
-    gap: 1rem;
-    width: 100%;
-    flex-shrink: 1;
-    align-items: center;
-}
-
-.add_new_task__dialog label input{
+.add_new_task__dialog input{
     min-height: 2rem;
     flex-grow: 1;
-    min-width: 200px;
+    min-width: 300px;
     background-color: var(--inputs);
     border: 2px solid var(--foreground);
     border-radius: 0.3rem;
     color: var(--foreground);
     font-size: 1rem;
+}
+
+.add_new_task__dialog div.add_new_task__dialog-close {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.6rem;
 }
 
 .add_new_task__dialog button {
@@ -248,4 +230,48 @@
     .main {
         gap: 0;  
     }
+}
+
+.menu {
+    min-width: max-content;
+    padding: .5rem 0 .5rem 0;
+    font-size: 1rem;
+    color: var(--foreground);
+    border: 2px solid var(--foreground);
+    border-radius: 0.3rem;
+}
+
+.btn__lists {
+    position: relative;
+}
+
+.btn__lists-dropdown {
+    position: absolute;
+    top: -.6rem;
+    left: calc(100% + .25rem);
+    background-color: var(--background);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms ease-in-out;
+    list-style: none;
+}
+
+.btn__lists-dropdown hr {
+    border: 1px dashed var(--background-transparent);
+    width: 100%;
+}
+
+.btn__lists-dropdown li {
+    padding: .5rem 1rem .5rem 1rem;
+    text-align: start;
+}
+
+.btn__lists-dropdown li:hover {
+    color: var(--foreground-done);
+    background-color: var(--highlight);
+}
+
+.btn__lists.open > .btn__lists-input + .btn__lists-dropdown {
+    opacity: 1;
+    pointer-events: auto;
 }

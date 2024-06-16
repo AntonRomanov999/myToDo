@@ -45,10 +45,9 @@
           <button class="btn__show-info">+</button>
         </div>
         <div class="task__info">
-          <p>Start: <span class="task__start-date"></span></p> 
+          <p>Start: <span class="task__start-date"></span></p>
           <input class="btn btn__fin-date" type="date" />
           <button class="btn btn__del">Delete</button>
-                            
         </div>
       </div>
     </template>
@@ -63,19 +62,21 @@
     <!-- modal for new task -->
     <dialog class="add_new_task__dialog">
       <div>
-        <label>Name:
-          <input type="text" class="task__input" id="input_name" placeholder="New task"/>
-        </label>
-        <label>
-          List:
-          <input class="task__input" list="lists" id="input_group" /> 
-          <datalist id="lists">
-            <!-- groups -->
-          </datalist>
-          <!-- Tag:
-          <input type="text" class="task__input" id="input_tag" />      -->
-        </label>
-        <button class="btn" id="add">Add!</button>
+          <input
+            type="text"
+            class="task__input btn"
+            id="input_name"
+            placeholder="Name for new task"
+          />
+        <input class="btn btn__fin-date" type="date" />
+        <button class="btn__lists btn">
+          <p class="btn__lists-input" contenteditable="plaintext-only">Enter or choose list ></p>
+          <ul class="menu btn__lists-dropdown"></ul>
+        </button>
+        <div class="add_new_task__dialog-close">
+          <button class="btn" id="add">Add!</button>
+          <button class="btn" id="cancel">Cancel</button>
+        </div>
       </div>
     </dialog>
     <!-- modal for new task -->

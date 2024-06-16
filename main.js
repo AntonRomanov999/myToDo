@@ -32,29 +32,51 @@ function getGroups() {
 const addBtn = document.querySelector('.btn__add');
 const dlgNewTask = document.querySelector('.add_new_task__dialog');
 const dlgAddClose = document.getElementById("add");
+const dlgCnclClose = document.getElementById("cancel");
+//create menu items with lists names
 function groupList() {
   const groups = getGroups();
   dlgLists.innerHTML = "";
   groups.forEach((i) => {
-    const item = document.createElement("option");
-    item.value = i;
-    dlgLists.prepend(item);
+    const item = document.createElement("li");
+    const hr = document.createElement("hr");
+    item.textContent = i;
+    item.addEventListener('click', () => {
+      newGroup.textContent = item.textContent
+    });
+    dlgLists.append(item);
+    if (groups.indexOf(i) !== groups.length - 1) dlgLists.append(hr);
   })
 }
 addBtn.addEventListener("click", () => {
   dlgNewTask.showModal();
-  groupList();
+  groupList()
 });
 //variables for new task values
-const dlgLists = document.getElementById("lists");
-const newName = document.getElementById("input_name");
-const newGroup = document.getElementById("input_group");
+const dlgLists = document.querySelector('.btn__lists-dropdown');
+const newName = document.getElementById('input_name');
+//input for new tasks list
+const newGroup = document.querySelector('.btn__lists-input');
+newGroup.addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    newGroup.blur();
+  }  
+})
+//dropdown with lists
+dlgNewTask.addEventListener('click', (event) => {
+  const dropdown = document.querySelector('.btn__lists');
+  if (event.target === newGroup && getGroups().length > 0) dropdown.classList.toggle('open')
+  else dropdown.classList.remove('open')
+})
+//deadline selector
+const finishDateField = document.querySelector(".btn__fin-date");
 //button for creating new task
 dlgAddClose.addEventListener("click", () => {
-  Task.addNewTask(newName.value, newGroup.value);
+  Task.addNewTask(newName.value, newGroup.textContent, finishDateField.value);
   dlgNewTask.close();
   regenTasks();
 });
+dlgCnclClose.addEventListener("click", () => dlgNewTask.close());
 
 //render tasks
 const frameTasks = document.querySelector(".frame__tasks");
@@ -204,15 +226,18 @@ btnShowAll.addEventListener("click", () => {
   regenTasks();
 })
 
-//calculate days for task
+//display general info
 function renderInfo() {
   const info = document.querySelector(".info");
   const tasksInfo = tasks.length !== 1 ? `${tasks.length} tasks` : `${tasks.length} task`;
   const unfinQ = tasks.length - getTasks('state', 'Done!').length;
   const groupsQ = getGroups().length;
   const groupsInfo = groupsQ !== 1 ? `${groupsQ} lists` : `${groupsQ} list`;
+  const tasksCurList = getTasks(filterKey, filterValue);
+  const notfinCurList = tasksCurList.filter((i) => i.state !== 'Done!');
   info.children[0].textContent = `MyToDo: ${tasksInfo} in ${groupsInfo}, ${unfinQ} not done`;
-  info.children[1].textContent = `${filterValue}`
+  info.children[1].textContent = `${filterValue} (${tasksCurList.length}/${notfinCurList.length})`
 }
 
 renderInfo();
+

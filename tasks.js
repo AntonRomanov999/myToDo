@@ -9,10 +9,11 @@ class Task {
       this.deadline = deadline;
       this.fullinfo = fullinfo || 'close';
     }
-    static addNewTask(name, group) {
+    static addNewTask(name, group, deadline) {
       if (name) {
         const date = new Date().toISOString().slice(0, 10);
-        tasks.push(new Task(name, date, group));
+        const enddate = deadline ? deadline : date;
+        tasks.push(new Task(name, date, group, enddate));
         saveTasks()     
       } else throw 'Error: name for task needed!'
     }
