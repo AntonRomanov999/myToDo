@@ -1,4 +1,13 @@
+import { saveTasks } from "./main.js";
+
 let tasks = JSON.parse(localStorage.getItem('TODO')) ? JSON.parse(localStorage.getItem('TODO')) : [];
+
+const filter = {
+  key: "group",
+  value: JSON.parse(localStorage.getItem("TODO_filter"))
+    ? JSON.parse(localStorage.getItem("TODO_filter"))
+    : "All tasks",
+};
 
 class Task {
     constructor(name, startDate, group, deadline, state, fullinfo) {
@@ -29,9 +38,11 @@ class Task {
     }
   }
 
-  function saveTasks() {
-    const tasksToSave = JSON.stringify(tasks);
-    localStorage.setItem('TODO', tasksToSave);
-  }
+function daysLeft(task) {
+  const DAY_LENGTH_MSEC = 86400000;
+  const currentDate = new Date().toISOString().slice(0, 10);
+  const days = (Date.parse(task.deadline) - Date.parse(currentDate)) / DAY_LENGTH_MSEC;
+  return days >= 0 ? `${days} day(s) left` : `${-days} day(s) overdue`;
+}
 
-export { Task, saveTasks, tasks }
+export { Task, tasks, daysLeft }

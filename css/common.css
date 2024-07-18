@@ -4,10 +4,12 @@
     --background: #ede8d0;
     --background-done: #85c198;
     --background-inprogress: #a5c6d6;
-    --background-transparent: #7b899180;
+    --background-transparent: #454f5580;
     --foreground-done: #4a4a4a;
+    --shadow-dark: #1c1c1c;
     --highlight: #e3fbff;
     --inputs: #f2edff;
+    --inputs-outline: #a4a0af;
     font-family: 'Open Sans', sans-serif;
     background-color: var(--background);
    }

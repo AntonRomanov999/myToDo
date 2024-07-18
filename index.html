@@ -1,84 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TODO</title>
-    <link rel="stylesheet" href="css/index.css" />
-    <script type="module" src="./main.js"></script>
-  </head>
 
-  <body>
-    <section class="info__frame">
-      <div class="info">
-        <div></div>
-        <div></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TODO</title>
+  <link rel="stylesheet" href="css/index.css" />
+  <script type="module" src="./main.js"></script>
+</head>
+
+<body>
+  <section class="info__frame">
+    <div class="info">
+      <div></div>
+      <div></div>
+    </div>
+  </section>
+  <div class="main">
+    <div class="frame sidebar">
+      <div class="frame frame__buttons">
+        <button class="btn btn__add">Add new task</button>
+        <button class="btn btn__rename">Rename list</button>
+        <button class="btn btn__sort-name">Sort by name ↓</button>
+        <button class="btn btn__sort-state">Sort by state ↓</button>
+        <button class="btn btn__sort-dline">Sort by deadline ↓</button>
+        <button class="btn btn__show-all">Show all tasks</button>
       </div>
-    </section>
-    <div class="main">
-      <div class="frame sidebar">
-        <div class="frame frame__buttons">
-          <button class="btn btn__add">Add new task</button>
-          <button class="btn btn__sort-name">Sort by name ↓</button>
-          <button class="btn btn__sort-state">Sort by state ↓</button>
-          <button class="btn btn__sort-dline">Sort by deadline ↓</button>
-          <button class="btn btn__show-all">Show all tasks</button>
-        </div>
-        <div class="frame frame__lists">
-          <!-- lists -->
-        </div>
-      </div>
-      <div class="frame frame__tasks">
-        <!-- tasks -->
+      <div class="frame frame__lists">
+        <!-- lists -->
       </div>
     </div>
+    <div class="frame frame__tasks">
+      <!-- tasks -->
+    </div>
+  </div>
 
-    <!-- template for task -->
-    <template id="task">
-      <div class="task">
-        <div class="task__container">
-          <div class="task__name" contenteditable="plaintext-only">
-            <!-- name -->
-          </div>
-          <input class="btn btn__change-state" type="button" />
-          <button class="btn__show-info">+</button>
+  <!-- template for task -->
+  <template id="task">
+    <div class="task">
+      <div class="task__container">
+        <div class="task__name" contenteditable="true">
+          <!-- name -->
         </div>
-        <div class="task__info">
-          <p>Start: <span class="task__start-date"></span></p>
-          <input class="btn btn__fin-date" type="date" />
-          <button class="btn btn__del">Delete</button>
-        </div>
+        <input class="btn btn__change-state" type="button" />
+        <button class="btn__show-info">+</button>
       </div>
-    </template>
-    <!-- template for task -->
-
-    <!-- template for list -->
-    <template id="list">
-      <button class="btn btn--filter"></button>
-    </template>
-    <!-- template for list -->
-
-    <!-- modal for new task -->
-    <dialog class="add_new_task__dialog">
-      <div>
-          <input
-            type="text"
-            class="task__input btn"
-            id="input_name"
-            placeholder="Name for new task"
-          />
+      <div class="task__info">
+        <p>Start:<span class="task__start-date"></span></p>
         <input class="btn btn__fin-date" type="date" />
-        <button class="btn__lists btn">
-          <p class="btn__lists-input" contenteditable="plaintext-only">Enter or choose list ></p>
-          <ul class="menu btn__lists-dropdown"></ul>
-        </button>
-        <div class="add_new_task__dialog-close">
-          <button class="btn" id="add">Add!</button>
-          <button class="btn" id="cancel">Cancel</button>
-        </div>
+        <button class="btn btn__move">Move</button>
+        <button class="btn btn__del">Delete</button>
       </div>
-    </dialog>
-    <!-- modal for new task -->
-  </body>
+    </div>
+  </template>
+  <!-- template for task -->
+
+  <!-- modal for new name for group -->
+  <dialog class="move_task__dialog">
+    <div>
+      <button class="btn list__input">
+        <p contenteditable="true">New list for task</p>
+      </button>
+      <ul class="move_task__lists"></ul>
+      <button class="btn" id="move">Move!</button>
+    </div>
+  </dialog>
+  <!-- modal for new name for group -->
+
+  <!-- template for list -->
+  <template id="list">
+    <button class="btn btn--filter"></button>
+  </template>
+  <!-- template for list -->
+
+  <!-- modal for new task -->
+  <dialog class="add_new_task__dialog">
+    <div>
+      <input type="text" class="task__input btn" id="input_name" placeholder="Name for new task" />
+      <input class="btn btn__fin-date" type="date" />
+      <div class="btn__lists">
+        <input type="text" class="btn__lists-input btn" placeholder="Enter or choose list >"></input>
+        <ul class="menu btn__lists-dropdown"></ul>
+      </div>
+      <div class="add_new_task__dialog-close">
+        <button class="btn" id="add">Add!</button>
+        <button class="btn" id="cancel">Cancel</button>
+      </div>
+    </div>
+  </dialog>
+  <!-- modal for new task -->
+</body>
+
 </html>

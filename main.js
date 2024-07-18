@@ -1,14 +1,21 @@
-import { Task, saveTasks, tasks } from "./tasks.js";
-
+import { Task, tasks, daysLeft } from "./tasks.js";
+import { sortTasks } from "./sort.js";
 //settings for display tasks
 let filterKey = 'group';
-let filterValue = 'All tasks';
-
+let filterValue = JSON.parse(localStorage.getItem('TODO_filter')) ? JSON.parse(localStorage.getItem('TODO_filter')) : 'All tasks';
 //get tasks for render
 function getTasks(key, value) {
   if (value === 'All tasks') {
-    return tasks
-  } else return tasks.filter((i) => i[key] === value);
+    return [...tasks]
+  } else return [...tasks].filter((i) => i[key] === value);
+}
+
+//save current state
+function saveTasks() {
+  const tasksToSave = JSON.stringify(tasks);
+  const tasksFilter = JSON.stringify(filterValue);
+  localStorage.setItem('TODO', tasksToSave);
+  localStorage.setItem('TODO_filter', tasksFilter);
 }
 
 //refresh tasks and lists display
@@ -20,12 +27,10 @@ function regenTasks() {
   renderInfo()
 }
 
+//get all lists
 function getGroups() {
-  const allGroups = [];
-  tasks.forEach((i) => {
-    if (!allGroups.includes(i.group)) allGroups.push(i.group);
-  });
-  return allGroups.sort()
+  const allGroups = new Set(tasks.map((i) => i.group));
+  return [...allGroups].sort()
 }
 
 //modal dialog for creation new task
@@ -34,37 +39,38 @@ const dlgNewTask = document.querySelector('.add_new_task__dialog');
 const dlgAddClose = document.getElementById("add");
 const dlgCnclClose = document.getElementById("cancel");
 //create menu items with lists names
-function groupList() {
+function menuLists(menu, input) {
   const groups = getGroups();
-  dlgLists.innerHTML = "";
+  menu.innerHTML = "";
   groups.forEach((i) => {
     const item = document.createElement("li");
     const hr = document.createElement("hr");
     item.textContent = i;
     item.addEventListener('click', () => {
-      newGroup.textContent = item.textContent
+      input.textContent = item.textContent
     });
-    dlgLists.append(item);
-    if (groups.indexOf(i) !== groups.length - 1) dlgLists.append(hr);
+    menu.append(item);
+    if (groups.indexOf(i) !== groups.length - 1) menu.append(hr);
   })
 }
 addBtn.addEventListener("click", () => {
   dlgNewTask.showModal();
-  groupList()
+  menuLists(dlgLists, newGroup)
 });
 //variables for new task values
 const dlgLists = document.querySelector('.btn__lists-dropdown');
 const newName = document.getElementById('input_name');
 //input for new tasks list
+const dropdown = document.querySelector('.btn__lists');
 const newGroup = document.querySelector('.btn__lists-input');
 newGroup.addEventListener("keypress", (event) => {
   if (event.key === "Enter") {
     newGroup.blur();
+    dropdown.classList.remove('open');
   }  
 })
 //dropdown with lists
 dlgNewTask.addEventListener('click', (event) => {
-  const dropdown = document.querySelector('.btn__lists');
   if (event.target === newGroup && getGroups().length > 0) dropdown.classList.toggle('open')
   else dropdown.classList.remove('open')
 })
@@ -82,16 +88,17 @@ dlgCnclClose.addEventListener("click", () => dlgNewTask.close());
 const frameTasks = document.querySelector(".frame__tasks");
 const taskTemplate = document.getElementById("task");
 
+
 function renderTasks() {
   let tasksToRender = getTasks(filterKey, filterValue);
   for (let i = 0; i < tasksToRender.length; i++) {
     const clone = taskTemplate.content.cloneNode(true);
     const nameText = clone.querySelector(".task__name");
     const startDate = tasksToRender[i].startDate.split('-').reverse().join('.');
-    nameText.textContent = `${tasksToRender[i].name}`;
+    nameText.textContent = tasksToRender[i].name;
     nameText.addEventListener("focusout", () => {
       Task.renameTask(tasksToRender[i], nameText.textContent);
-      regenTasks()
+      nameText.textContent = `${tasksToRender[i].name}`;
     })
     nameText.addEventListener("keypress", (event) => {
       if (event.key === "Enter") {
@@ -102,6 +109,12 @@ function renderTasks() {
     btnDel.addEventListener("click", () => {
       Task.delTask(tasksToRender[i]);
       regenTasks()
+    });
+    const moveBtn = clone.querySelector('.btn__move');
+    const dlgMoveTask = document.querySelector('.move_task__dialog');
+    moveBtn.addEventListener("click", () => {
+      dlgMoveTask.showModal();
+      menuLists(document.querySelector('.move_task__lists'), document.querySelector('.list__input p'));
     });
     const btnChangeState = clone.querySelector(".btn__change-state");
     if (tasksToRender[i].state === 'Done!') { 
@@ -125,12 +138,13 @@ function renderTasks() {
       saveTasks();
       regenTasks();
     });
-    const startDateField = clone.querySelector(".task__start-date");
-    startDateField.textContent = `${startDate}`;
+    const infoField = clone.querySelector(".task__start-date");
+    infoField.textContent = `${startDate}, ${daysLeft(tasksToRender[i])}`;
     const finishDateField = clone.querySelector(".btn__fin-date");
     finishDateField.addEventListener("change", () => {
       tasksToRender[i].deadline = finishDateField.value;
       saveTasks();
+      infoField.textContent = `${startDate}, ${daysLeft(tasksToRender[i])}`;
     });
     finishDateField.value = `${tasksToRender[i].deadline}`;
     const btnShowInfo = clone.querySelector(".btn__show-info");
@@ -145,54 +159,26 @@ function renderTasks() {
 
 renderTasks();
 
-//sort tasks
-function sortTasks(value, num) {
-  const compareFn =
-    value !== 'deadline'
-      ? (a, b) => {
-          if (a[value] < b[value]) {
-            return -num;
-          } else if (a[value] > b[value]) {
-            return num;
-          }
-          return 0;
-        }
-      : (a, b) => {
-          return ( Date.parse(a[value]) - Date.parse(b[value]) ) * num;
-        };
-  tasks.sort(compareFn);
-}
-
 let order = 1;
-
-function showSorted(value, btn) {   
+function showSorted(items, value, btn) {
   if (order === 1) {
     btn.textContent = `Sort by ${value} ↑`;
-    sortTasks(value, order);
-    regenTasks();
     order = -1;
   } else {
     btn.textContent = `Sort by ${value} ↓`;
-    sortTasks(value, order);
-    regenTasks();
     order = 1;
   }
+  items.sort(sortTasks(value, order));
+  frameTasks.innerHTML = "";
+  renderTasks();
 }
-
+//buttons for sorting tasks
 const btnSortbyName = document.querySelector(".btn__sort-name");
-btnSortbyName.addEventListener("click", () => {
-  showSorted("name", btnSortbyName);
-});
-
 const btnSortbyState = document.querySelector('.btn__sort-state');
-btnSortbyState.addEventListener("click", () => {   
-  showSorted("state", btnSortbyState);
-})
-
 const btnSortbyDLine = document.querySelector('.btn__sort-dline');
-btnSortbyDLine.addEventListener("click", () => {   
-  showSorted("deadline", btnSortbyDLine);
-})
+btnSortbyName.addEventListener("click", () => showSorted(tasks, "name", btnSortbyName));
+btnSortbyState.addEventListener("click", () => showSorted(tasks, "state", btnSortbyState));
+btnSortbyDLine.addEventListener("click", () => showSorted(tasks, "deadline", btnSortbyDLine));
 
 //render lists (groups)
 const frameLists = document.querySelector(".frame__lists");
@@ -211,6 +197,7 @@ function renderLists() {
     }
     btnList.addEventListener("click", () => {
       filterValue = `${listsToRender[i]}`;
+      saveTasks();
       regenTasks();
     });
     frameLists.appendChild(clone);
@@ -223,6 +210,7 @@ renderLists()
 const btnShowAll = document.querySelector(".btn__show-all");
 btnShowAll.addEventListener("click", () => {
   filterValue = 'All tasks';
+  saveTasks();
   regenTasks();
 })
 
@@ -241,3 +229,18 @@ function renderInfo() {
 
 renderInfo();
 
+//change current group(list) name
+function moveTasks(newname, group) {
+  tasks.map((i) => {
+    if (i.group === group) i.group = newname;
+    saveTasks();
+    filterValue = newname;
+    regenTasks()
+  })
+}
+const renameBtn = document.querySelector('.btn__rename');
+renameBtn.addEventListener("click", () => {
+  moveTasks(prompt(), filterValue)
+});
+
+export { saveTasks }

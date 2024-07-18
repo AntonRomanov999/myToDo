@@ -12,6 +12,7 @@
 .info__frame {
     color: var(--background);
     background-color: var(--foreground);
+    box-shadow: 0 5px 5px var(--shadow-dark);
 }
 
 .info {
@@ -45,6 +46,7 @@
     border: 2px solid var(--foreground);
     border-radius: 0.3rem;
     cursor: pointer;
+    box-shadow: 4px 4px 3px var(--background-transparent);
 }
 
 .active {
@@ -102,7 +104,9 @@
     border: 2px solid var(--foreground);
     border-radius: 0.3rem;
     font-size: 1rem;
-    color: var(--foreground);   
+    color: var(--foreground);  
+    box-shadow: 4px 4px 3px var(--background-transparent); 
+    overflow: visible;
 }
 
 .task__name {
@@ -150,17 +154,20 @@
     font-style: italic;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.5s ease;
+    transition: max-height 0.4s ease-in-out;
 }
 
 .task__info.show {
-    max-height: 200px;
+    max-height: 300px;
+}
+
+.task__info .btn {
+    margin-bottom: 5px;
 }
 
 .task__info input {
     margin-left: 0.5rem;
     font-size: 0.8rem;
-    /* font-style: italic;    */
     font-family: 'Open Sans', sans-serif; 
 }
 
@@ -177,7 +184,7 @@
     margin-left: 0.5rem;
 }
 
-.add_new_task__dialog {
+.add_new_task__dialog, .move_task__dialog {
     margin: auto;
     color: var(--foreground);
     background-color: var(--background);
@@ -186,11 +193,11 @@
     overflow: visible;
 }
 
-.add_new_task__dialog::backdrop {
+.add_new_task__dialog::backdrop, .move_task__dialog::backdrop {
     background: var(--background-transparent);  
 }
 
-.add_new_task__dialog div {
+.add_new_task__dialog div, .move_task__dialog div {
     display: flex;
     flex-grow: 1;
     flex-shrink: 1;
@@ -199,10 +206,14 @@
     align-items: center;
 }
 
-.add_new_task__dialog input{
+.move_task__dialog div button {
+    min-width: 100%;
+}
+
+.add_new_task__dialog input, .move_task__dialog input {
     min-height: 2rem;
     flex-grow: 1;
-    min-width: 300px;
+    min-width: 40vw;
     background-color: var(--inputs);
     border: 2px solid var(--foreground);
     border-radius: 0.3rem;
@@ -221,17 +232,6 @@
     min-width: 100%;
 }
 
-@media (max-width: 767px) {
-    .sidebar {
-        width: 0;
-        overflow: hidden;
-    }
-
-    .main {
-        gap: 0;  
-    }
-}
-
 .menu {
     min-width: max-content;
     padding: .5rem 0 .5rem 0;
@@ -239,6 +239,17 @@
     color: var(--foreground);
     border: 2px solid var(--foreground);
     border-radius: 0.3rem;
+    list-style: none;
+    background-color: var(--background);
+}
+
+.move_task__lists {
+    min-width: 100%;
+    font-size: 1rem;
+    color: var(--foreground);
+    list-style: none;
+    background-color: var(--background);
+    padding-inline-start: 0;  
 }
 
 .btn__lists {
@@ -249,14 +260,12 @@
     position: absolute;
     top: -.6rem;
     left: calc(100% + .25rem);
-    background-color: var(--background);
     opacity: 0;
     pointer-events: none;
     transition: opacity 150ms ease-in-out;
-    list-style: none;
 }
 
-.btn__lists-dropdown hr {
+.btn__lists-dropdown hr, .move_task__lists hr {
     border: 1px dashed var(--background-transparent);
     width: 100%;
 }
@@ -266,12 +275,36 @@
     text-align: start;
 }
 
-.btn__lists-dropdown li:hover {
+.btn__lists-dropdown li:hover, .move_task__lists li:hover {
     color: var(--foreground-done);
     background-color: var(--highlight);
+    cursor: pointer;
 }
 
-.btn__lists.open > .btn__lists-input + .btn__lists-dropdown {
+.btn__lists.open > .btn__lists-dropdown {
     opacity: 1;
     pointer-events: auto;
 }
+
+.task__name:focus, .btn__lists-input:focus, input:focus, .list__input p {
+    border-radius: 6px;
+    outline: 2px solid var(--inputs-outline);
+    background-color: var(--highlight);
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        width: 0;
+        overflow: hidden;
+    }
+
+    .main {
+        gap: 0;  
+    }
+
+    .add_new_task__dialog input{
+        min-width: 70vw;
+    }
+}
+
+
